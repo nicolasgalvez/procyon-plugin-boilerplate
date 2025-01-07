@@ -1,0 +1,10 @@
+{
+    "name": "@procyoncreative/plugin-boilerplate",
+    "scripts": {
+        "lint:js": "wp-scripts lint-js"
+    },
+    "devDependencies": {
+        "@wordpress/scripts": "^30.8.1",
+        "minimist": "^1.2.8"
+    }
+}
