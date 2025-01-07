@@ -14,7 +14,7 @@ const defaultValues = {
 	dashicon: 'heart',
 	author: 'Procyon Creative - block builder',
 	// Allow multiple blocks per plugin if a slug is used.
-	folderName: slug ? join( 'blocks', slug ) : 'blocks/default',
+	folderName: slug ? join( 'src', slug ) : 'src/default',
 	supports: {
 		align: true,
 		color: true,
@@ -41,6 +41,7 @@ const defaultValues = {
 	example: {},
 	customScripts: {
 		prestart: 'if [ ! -d vendor ]; then composer install; fi',
+		prebuild: 'if [ ! -d vendor ]; then composer install; fi',
 		build: 'wp-scripts build --experimental-modules',
 		start: 'wp-scripts start --experimental-modules',
 	},
