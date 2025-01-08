@@ -1,6 +1,7 @@
+{{=<% %>=}}
 name: Build and Zip WordPress Plugin
 env:
-  PLUGIN_NAME: {{slug}}
+  PLUGIN_NAME: <%slug%>
 on:
   release:
     types: [published]
@@ -9,6 +10,7 @@ on:
       - 'v*'  # Trigger this workflow on push to tags like v1.0, v20.15.10 etc.
     branches:
       - 'test' # test branch
+
 jobs:
   build:
     runs-on: ubuntu-latest
