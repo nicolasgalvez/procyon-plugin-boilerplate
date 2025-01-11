@@ -1,10 +1,29 @@
 {
-    "name": "@procyoncreative/plugin-boilerplate",
-    "scripts": {
-        "lint:js": "wp-scripts lint-js"
+    "name": "@procyon-creative/plugin-boilerplate",
+    "bin": {
+        "create-block": "./index.js"
     },
-    "devDependencies": {
+    "version": "1.0.0",
+    "description": "A WordPress plugin boilerplate.",
+    "engines": {
+        "node": ">=20.10.0",
+        "npm": ">=10.2.3"
+    },
+    "keywords": [
+        "WordPress",
+        "plugin",
+        "boilerplate"
+    ],
+    "author": "Procyon Creative",
+    "license": "GPL-2.0-or-later",
+    "dependencies": {
+        "@inquirer/prompts": "^7.2.0",
         "@wordpress/scripts": "^30.8.1",
+        "commander": "^9.2.0",
         "minimist": "^1.2.8"
+    },
+    "scripts": {
+        "lint:js": "wp-scripts lint-js",
+        "test": "echo \"Error: no test specified\" && exit 1"
     }
 }

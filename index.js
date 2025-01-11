@@ -1,82 +1,36 @@
-/**
- * External dependencies
- */
-const { join } = require( 'path' );
+#!/usr/bin/env node
 
-// get the argument for block slug
-const slug = process.argv.slice( 2 )[ 0 ] || 'example';
+const program = require('commander')
+// get minimst
+const minimist = require('minimist')
+const { spawn } = require('child_process')
+// get the version number from package.json
+const version = require('./package.json').version
 
+// These will be the defaults for the custom values we are adding.
 const defaultValues = {
-	namespace: 'procyon',
-	slug: 'example',
-	title: 'Example Block',
-	description: 'An example block from my heart to yours.',
-	dashicon: 'heart',
-	author: 'Procyon Creative - block builder',
-	// Allow multiple blocks per plugin if a slug is used.
-	folderName: slug ? join( 'src', slug ) : 'src/default',
-	supports: {
-		align: true,
-		color: true,
-		typography: {
-			// Enable support and UI control for font-size.
-			fontSize: true,
-			// Enable support and UI control for line-height.
-			lineHeight: true,
-			// Enable support and UI control for text alignment.
-			textAlign: true,
-		},
-		shadow: true,
-		spacing: {
-			margin: true, // Enable margin UI control.
-			padding: true, // Enable padding UI control.
-			blockGap: true, // Enables block spacing UI control for blocks that also use `layout`.
-		},
-	},
-	customPackageJSON: { files: [ '[^.]*' ] },
-	updateURI: process.env.updateURI,
-	viewScript: null,
-	viewScriptModule: 'file:./view.js',
-	render: 'file:./render.php',
-	example: {},
-	customScripts: {
-		prestart: 'if [ ! -d vendor ]; then composer install; fi',
-		prebuild: 'if [ ! -d vendor ]; then composer install; fi',
-		build: 'wp-scripts build --experimental-modules',
-		start: 'wp-scripts start --experimental-modules',
-	},
-	transformer: ( view ) => {
-		return {
-			...view,
-			// get the env variable for github username.
-			githubAccount: process.env.GITHUB_ACCOUNT,
-		};
-	},
-};
+	updateURI: undefined,
+	githubAccount: undefined
+}
 
-module.exports = {
-	defaultValues: {
-		...defaultValues,
-	},
-	variants: {
-		default: {},
-		typescript: {
-			slug: 'example-interactive-typescript',
-			title: 'Example Interactive TypeScript',
-			description:
-				'An interactive block with the Interactivity API using TypeScript.',
-			viewScriptModule: 'file:./view.ts',
-		},
-		interactive: {
-			description: 'An interactive block with the Interactivity API.',
-			npmDependencies: [ '@wordpress/interactivity' ],
-			supports: {
-				...defaultValues.supports,
-				interactivity: true,
-				ariaLabel: true,
-			},
-		},
-	},
-	pluginTemplatesPath: join( __dirname, 'plugin-templates' ),
-	blockTemplatesPath: join( __dirname, 'block-templates' ),
-};
+// set default commander arguments, allow unknown options so we can just snarfle the ones we want.
+program.allowUnknownOption().
+	version(version).
+	description('Create a new WordPress block').
+	option('-g, --githubAccount <slug>', 'Your GitHub account name').
+	parse(process.argv)
+
+// To get around wordpress/create-block not allowing unknown args, we'll use environment variables
+process.env.GITHUB_ACCOUNT = program.githubAccount
+
+// call npx create-block, pass argv
+const child = spawn('npx',
+	['@wordpress/create-block', ...process.argv.slice(2)], { stdio: 'inherit' })
+
+child.on('error', (error) => {
+	console.error(`Boilerplate got an error: ${error}`)
+})
+
+child.on('exit', (code) => {
+	console.log(`Plugin setup complete! ${code}`)
+})
