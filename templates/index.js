@@ -15,7 +15,8 @@ const defaultValues = {
 	author: 'Procyon Creative - block builder',
 	wpEnv: true,
 	// Allow multiple blocks per plugin if a slug is used.
-	folderName: slug ? join('src', slug) : 'src/default',
+	folderName: join('src', slug),
+	domainPath: slug,
 	supports: {
 		align: true,
 		color: true,
